@@ -4,8 +4,8 @@ from django.urls import reverse_lazy
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .models import Categoria, Subcategoria
-from .forms import CategoriaForm, SubCategoriaForm
+from .models import Categoria, Subcategoria, Marca
+from .forms import CategoriaForm, SubCategoriaForm, MarcaForm
 
 
 # Categoria.
@@ -45,7 +45,7 @@ class CategoriaEdit(LoginRequiredMixin, generic.UpdateView):
 class CategoriaDel(LoginRequiredMixin, generic.DeleteView):
     model = Categoria
     template_name = "inv/catalogos_del.html"
-    context_object_name='obj'
+    context_object_name = "obj"
     success_url = reverse_lazy('inv:categoria_list')
 
 # Sub categoria
@@ -82,9 +82,42 @@ class SubCategoriaEdit(LoginRequiredMixin, generic.UpdateView):
         return super().form_valid(form)
 
 
-
 class SubCategoriaDel(LoginRequiredMixin, generic.DeleteView):
     model = Subcategoria
     template_name = "inv/catalogos_del.html"
-    context_object_name='obj'
+    context_object_name = "obj"
     success_url = reverse_lazy('inv:subcategoria_list')
+
+
+#Marca
+class MarcaView(LoginRequiredMixin, generic.ListView):
+    model = Marca
+    template_name = "inv/marca_list.html"
+    context_object_name = "obj"
+    login_url = 'bases.login'
+
+
+class MarcaNew(LoginRequiredMixin, generic.CreateView):
+    model = Marca
+    template_name = "inv/marca_form.html"
+    context_object_name = "obj"
+    success_url = reverse_lazy('inv:marca_list')
+    form_class = MarcaForm
+    login_url = 'bases.login'
+
+    def form_valid(self, form):
+        form.instance.usuario_creador = self.request.user
+        return super().form_valid(form)
+
+
+class MarcaEdit(LoginRequiredMixin, generic.UpdateView):
+    model = Marca
+    template_name = "inv/marca_form.html"
+    context_object_name = "obj"
+    success_url = reverse_lazy('inv:marca_list')
+    form_class = MarcaForm
+    login_url = 'base.login'
+
+    def form_valid(self, form):
+        form.instance.usuario_creador = self.request.user
+        return super().form_valid(form)
