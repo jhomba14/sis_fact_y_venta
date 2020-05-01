@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Categoria, Subcategoria, Marca
+from .models import Categoria, Subcategoria, Marca, UnidadMedida
 
 class CategoriaForm(forms.ModelForm):
     class Meta:
@@ -47,6 +47,22 @@ class MarcaForm(forms.ModelForm):
         'estado':"Estado"}
         widget = {'descripcion': forms.TextInput}
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args ,**kwargs)
+        for field in iter(self.fields):
+            self.fields[field].widget.attrs.update({
+                'class':"form-control"
+            })
+
+
+class UnidadMedidaForm(forms.ModelForm):
+    class Meta:
+        model = UnidadMedida
+        fields = ['descripcion','estado']
+        labels = {'descripcion':"Descripcion",
+        'estado':"Estado"}
+        widget = {'descripcion': forms.TextInput}
+    
     def __init__(self, *args, **kwargs):
         super().__init__(*args ,**kwargs)
         for field in iter(self.fields):

@@ -4,8 +4,8 @@ from django.urls import reverse_lazy
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .models import Categoria, Subcategoria, Marca
-from .forms import CategoriaForm, SubCategoriaForm, MarcaForm
+from .models import Categoria, Subcategoria, Marca, UnidadMedida
+from .forms import CategoriaForm, SubCategoriaForm, MarcaForm, UnidadMedidaForm
 
 
 # Categoria.
@@ -139,4 +139,57 @@ def marca_inactivar(request, id):
         marca.save()
         return redirect('inv:marca_list')
 
-    return render(request, template_name, contexto) 
+    return render(request, template_name, contexto)
+
+
+#Unida de medida
+class UnidadMedidaView(LoginRequiredMixin, generic.ListView):
+    model = UnidadMedida
+    template_name= "inv/um_list.html"
+    context_object_name = "obj"
+    login_url = 'bases:login'
+
+
+class UnidadMedidaNew(LoginRequiredMixin, generic.CreateView):
+    model = UnidadMedida
+    template_name = "inv/um_form.html"
+    context_object_name = "obj"
+    success_url = reverse_lazy('inv:um_list')
+    form_class = UnidadMedidaForm
+    login_url = 'bases:login'
+
+    def form_valid(self, form):
+        form.instance.usuario_creador = self.request.user
+        return super().form_valid(form)
+    
+
+class UnidadMedidaEdit(LoginRequiredMixin, generic.UpdateView):
+    model = UnidadMedida
+    template_name = "inv/um_form.html"
+    context_object_name = "obj"
+    success_url = reverse_lazy('inv:um_list')
+    form_class = UnidadMedidaForm
+    login_url = 'bases:login'
+
+    def form_valid(self, form):
+        form.instance.usuario_creador = self.request.user
+        return super().form_valid(form)
+
+
+def unidad_medida_inactivar(request, id):
+    unidad_medida = UnidadMedida.objects.filter(pk=id).first()
+    contexto = {}
+    template_name = "inv/catalogos_del.html"
+
+    if not unidad_medida:
+        return redirect('inv:um_list')
+
+    if request.method == 'GET':
+        contexto = {'obj':unidad_medida}
+
+    if request.method == 'POST':
+        unidad_medida.estado = False
+        unidad_medida.save()
+        return redirect('inv:um_list')
+
+    return render(request, template_name, contexto)
