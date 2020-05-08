@@ -60,8 +60,8 @@ $(document).ready(function(){
           console.log(response);
           cerrar_modal();
           //alert(response);
-          var tipo=(response.startsWith('Proveedor no existe') ? 'red':'green' );
-          mensaje(response,tipo);
+          var tipo=(response.startsWith('Proveedor no exite') ? 'red':'green' );
+          mensaje(response, tipo);
         },
         error: function(jqXHR, textStatus, errorThrow){
           console.log(textStatus, errorThrow);

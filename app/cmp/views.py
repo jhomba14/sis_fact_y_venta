@@ -51,7 +51,7 @@ def proveedor_inactivar(request, id):
     prv = Proveedor.objects.filter(pk=id).first()
 
     if not prv:
-        return HttpResponse('El Proveedor no exite' + str(id))
+        return HttpResponse('Proveedor no exite' + str(id))
 
     if request.method=='GET':
         context={'obj':prv}
