@@ -95,7 +95,7 @@ class Producto(ClaseModelo):
             self.codigo_barra,
             self.descripcion,
             self.precio,
-            self.existenciam,
+            self.existencia,
             self.ultima_compra,
             self.marca,
             self.unidad_medida,
